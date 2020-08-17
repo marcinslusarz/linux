@@ -816,7 +816,8 @@ static void __intel_gt_set_wedged(struct intel_gt *gt)
 	awake = reset_prepare(gt);
 
 	/* Even if the GPU reset fails, it should still stop the engines */
-	if (!INTEL_INFO(gt->i915)->gpu_reset_clobbers_display)
+	if (!INTEL_INFO(gt->i915)->gpu_reset_clobbers_display &&
+			i915_modparams.reset)
 		__intel_gt_reset(gt, ALL_ENGINES);
 
 	for_each_engine(engine, gt, id)
