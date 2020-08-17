@@ -1042,7 +1042,7 @@ void intel_gt_reset(struct intel_gt *gt,
 		if (i915_modparams.reset)
 			drm_err(&gt->i915->drm, "GPU reset not supported\n");
 		else
-			drm_dbg(&gt->i915->drm, "GPU reset disabled\n");
+			drm_notice(&gt->i915->drm, "GPU reset disabled\n");
 		goto error;
 	}
 
