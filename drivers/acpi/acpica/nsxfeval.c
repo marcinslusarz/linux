@@ -532,8 +532,8 @@ static void acpi_ns_resolve_references(struct acpi_evaluate_info *info)
  *              return_value        - Location where return value of
  *                                    user_function is put if terminated early
  *
- * RETURNS      Return value from the user_function if terminated early.
- *              Otherwise, returns NULL.
+ * RETURNS      Returns status from the callback function if terminated early.
+ *              Otherwise, returns a status of the walk, AE_OK if succeeded.
  *
  * DESCRIPTION: Performs a modified depth-first walk of the namespace tree,
  *              starting (and ending) at the object specified by start_handle.
@@ -541,6 +541,11 @@ static void acpi_ns_resolve_references(struct acpi_evaluate_info *info)
  *              the type parameter is found. If the callback function returns
  *              a non-zero value, the search is terminated immediately and this
  *              value is returned to the caller.
+ *
+ *              Note that both the callback functions and the walk itself
+ *              use overlapping return values (e.g. AE_OK), so user of this
+ *              function can't rely only on the return value to tell if
+ *              the callback function was called.
  *
  *              The point of this procedure is to provide a generic namespace
  *              walk routine that can be called from multiple places to
