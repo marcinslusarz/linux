@@ -1357,7 +1357,7 @@ static int rtw_power_on(struct rtw_dev *rtwdev)
 	int ret;
 
 	if (rtwdev->always_power_on && test_bit(RTW_FLAG_POWERON, rtwdev->flags))
-		return 0;
+		goto success;
 
 	ret = rtw_hci_setup(rtwdev);
 	if (ret) {
@@ -1406,6 +1406,9 @@ static int rtw_power_on(struct rtw_dev *rtwdev)
 	wifi_only = !rtwdev->efuse.btcoex;
 	rtw_coex_power_on_setting(rtwdev);
 	rtw_coex_init_hw_config(rtwdev, wifi_only);
+
+success:
+	rtw_hci_start_rx(rtwdev);
 
 	return 0;
 
@@ -1509,6 +1512,8 @@ int rtw_core_start(struct rtw_dev *rtwdev)
 
 static void rtw_power_off(struct rtw_dev *rtwdev)
 {
+	rtw_hci_stop_rx(rtwdev);
+
 	if (rtwdev->always_power_on)
 		return;
 
