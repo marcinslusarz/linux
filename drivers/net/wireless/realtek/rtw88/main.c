@@ -302,7 +302,7 @@ static void rtw_ips_work(struct work_struct *work)
 
 	mutex_lock(&rtwdev->mutex);
 	if (rtwdev->hw->conf.flags & IEEE80211_CONF_IDLE)
-		rtw_enter_ips(rtwdev);
+		rtw_enter_ips(rtwdev, false);
 	mutex_unlock(&rtwdev->mutex);
 }
 
@@ -647,7 +647,7 @@ free:
 	rtw_iterate_stas_atomic(rtwdev, rtw_reset_sta_iter, rtwdev);
 	rtw_iterate_vifs_atomic(rtwdev, rtw_reset_vif_iter, rtwdev);
 	bitmap_zero(rtwdev->hw_port, RTW_PORT_NUM);
-	rtw_enter_ips(rtwdev);
+	rtw_enter_ips(rtwdev, true);
 }
 
 static void rtw_fw_recovery_work(struct work_struct *work)
@@ -1356,6 +1356,9 @@ static int rtw_power_on(struct rtw_dev *rtwdev)
 	bool wifi_only;
 	int ret;
 
+	if (rtwdev->always_power_on && test_bit(RTW_FLAG_POWERON, rtwdev->flags))
+		return 0;
+
 	ret = rtw_hci_setup(rtwdev);
 	if (ret) {
 		rtw_err(rtwdev, "failed to setup hci\n");
@@ -1506,6 +1509,9 @@ int rtw_core_start(struct rtw_dev *rtwdev)
 
 static void rtw_power_off(struct rtw_dev *rtwdev)
 {
+	if (rtwdev->always_power_on)
+		return;
+
 	rtw_hci_stop(rtwdev);
 	rtw_coex_power_off_setting(rtwdev);
 	rtw_mac_power_off(rtwdev);

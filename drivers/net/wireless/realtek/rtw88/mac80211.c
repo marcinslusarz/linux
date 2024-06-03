@@ -98,7 +98,7 @@ static int rtw_ops_config(struct ieee80211_hw *hw, u32 changed)
 	if ((changed & IEEE80211_CONF_CHANGE_IDLE) &&
 	    (hw->conf.flags & IEEE80211_CONF_IDLE) &&
 	    !test_bit(RTW_FLAG_SCANNING, rtwdev->flags))
-		rtw_enter_ips(rtwdev);
+		rtw_enter_ips(rtwdev, false);
 
 out:
 	mutex_unlock(&rtwdev->mutex);

@@ -620,7 +620,7 @@ static int rtw_wow_restore_ps(struct rtw_dev *rtwdev)
 	int ret = 0;
 
 	if (rtw_wow_no_link(rtwdev) && rtwdev->wow.ips_enabled)
-		ret = rtw_enter_ips(rtwdev);
+		ret = rtw_enter_ips(rtwdev, false);
 
 	return ret;
 }

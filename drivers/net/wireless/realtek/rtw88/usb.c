@@ -859,6 +859,9 @@ int rtw_usb_probe(struct usb_interface *intf, const struct usb_device_id *id)
 	rtwdev->hci.ops = &rtw_usb_ops;
 	rtwdev->hci.type = RTW_HCI_TYPE_USB;
 
+	if (rtwdev->chip->id == RTW_CHIP_TYPE_8821C)
+		rtwdev->always_power_on = true;
+
 	rtwusb = rtw_get_usb_priv(rtwdev);
 	rtwusb->rtwdev = rtwdev;
 

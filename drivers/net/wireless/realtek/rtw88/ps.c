@@ -24,8 +24,11 @@ static int rtw_ips_pwr_up(struct rtw_dev *rtwdev)
 	return ret;
 }
 
-int rtw_enter_ips(struct rtw_dev *rtwdev)
+int rtw_enter_ips(struct rtw_dev *rtwdev, bool force)
 {
+	if (!force && rtwdev->always_power_on)
+		return 0;
+
 	if (!test_bit(RTW_FLAG_POWERON, rtwdev->flags))
 		return 0;
 

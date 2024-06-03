@@ -2049,6 +2049,8 @@ struct rtw_dev {
 	bool beacon_loss;
 	struct completion lps_leave_check;
 
+	bool always_power_on;
+
 	struct dentry *debugfs;
 
 	u8 sta_cnt;
